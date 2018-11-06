@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QCallerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DBCustomer">
+    <Key>
+      <PropertyRef Name="CustomerId" />
+    </Key>
+    <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="DBReservations" Relationship="Self.FK__DBReserva__Custo__6477ECF3" FromRole="DBCustomer" ToRole="DBReservations" />
+  </EntityType>
+  <EntityType Name="DBReservation">
+    <Key>
+      <PropertyRef Name="ReservationID" />
+    </Key>
+    <Property Name="ReservationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RestaurantID" Type="Int32" Nullable="false" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="GuestCount" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="DBCustomer" Relationship="Self.FK__DBReserva__Custo__6477ECF3" FromRole="DBReservations" ToRole="DBCustomer" />
+    <NavigationProperty Name="DBRestaurant" Relationship="Self.FK__DBReserva__Resta__6383C8BA" FromRole="DBReservations" ToRole="DBRestaurant" />
+  </EntityType>
+  <EntityType Name="DBRestaurant">
+    <Key>
+      <PropertyRef Name="RestaurantId" />
+    </Key>
+    <Property Name="RestaurantId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ZipCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LogoID" Type="Int32" />
+    <NavigationProperty Name="DBReservations" Relationship="Self.FK__DBReserva__Resta__6383C8BA" FromRole="DBRestaurant" ToRole="DBReservations" />
+  </EntityType>
+  <EntityType Name="DBRestaurantLogo">
+    <Key>
+      <PropertyRef Name="LogoId" />
+    </Key>
+    <Property Name="LogoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="database_firewall_rules">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="name" />
+      <PropertyRef Name="start_ip_address" />
+      <PropertyRef Name="end_ip_address" />
+      <PropertyRef Name="create_date" />
+      <PropertyRef Name="modify_date" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <Association Name="FK__DBReserva__Custo__6477ECF3">
+    <End Role="DBCustomer" Type="Self.DBCustomer" Multiplicity="1" />
+    <End Role="DBReservations" Type="Self.DBReservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DBCustomer">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="DBReservations">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DBReserva__Resta__6383C8BA">
+    <End Role="DBRestaurant" Type="Self.DBRestaurant" Multiplicity="1" />
+    <End Role="DBReservations" Type="Self.DBReservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DBRestaurant">
+        <PropertyRef Name="RestaurantId" />
+      </Principal>
+      <Dependent Role="DBReservations">
+        <PropertyRef Name="RestaurantID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QCallerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DBCustomers" EntityType="Self.DBCustomer" />
+    <EntitySet Name="DBReservations" EntityType="Self.DBReservation" />
+    <EntitySet Name="DBRestaurants" EntityType="Self.DBRestaurant" />
+    <EntitySet Name="DBRestaurantLogoes" EntityType="Self.DBRestaurantLogo" />
+    <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
+    <AssociationSet Name="FK__DBReserva__Custo__6477ECF3" Association="Self.FK__DBReserva__Custo__6477ECF3">
+      <End Role="DBCustomer" EntitySet="DBCustomers" />
+      <End Role="DBReservations" EntitySet="DBReservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DBReserva__Resta__6383C8BA" Association="Self.FK__DBReserva__Resta__6383C8BA">
+      <End Role="DBRestaurant" EntitySet="DBRestaurants" />
+      <End Role="DBReservations" EntitySet="DBReservations" />
+    </AssociationSet>
+    <FunctionImport Name="DeleteCustomer">
+      <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteReservation">
+      <Parameter Name="ReservationID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DeleteRestaurant">
+      <Parameter Name="RestaurantID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SaveCustomer" ReturnType="Collection(Int32)">
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="EmailAddress" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SaveReservation" ReturnType="Collection(Int32)">
+      <Parameter Name="RestaurantID" Mode="In" Type="Int32" />
+      <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+      <Parameter Name="Date" Mode="In" Type="DateTime" />
+      <Parameter Name="GuestCount" Mode="In" Type="Int32" />
+      <Parameter Name="Status" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SaveRestaurant" ReturnType="Collection(Int32)">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="Address" Mode="In" Type="String" />
+      <Parameter Name="City" Mode="In" Type="String" />
+      <Parameter Name="State" Mode="In" Type="String" />
+      <Parameter Name="ZipCode" Mode="In" Type="String" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="EmailAddress" Mode="In" Type="String" />
+      <Parameter Name="Logo" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateCustomer">
+      <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="EmailAddress" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateReservation">
+      <Parameter Name="ReservationID" Mode="In" Type="Int32" />
+      <Parameter Name="Time" Mode="In" Type="DateTime" />
+      <Parameter Name="GuestCount" Mode="In" Type="Int32" />
+      <Parameter Name="Status" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateRestaurant">
+      <Parameter Name="RestaurantID" Mode="In" Type="Int32" />
+      <Parameter Name="RestaurantName" Mode="In" Type="String" />
+      <Parameter Name="Address" Mode="In" Type="String" />
+      <Parameter Name="City" Mode="In" Type="String" />
+      <Parameter Name="State" Mode="In" Type="String" />
+      <Parameter Name="ZipCode" Mode="In" Type="String" />
+      <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+      <Parameter Name="EmailAddress" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+</Schema>
